@@ -1,2 +1,2 @@
 # Emove
-A Canvas Library
+A Canvas Library Display Canvas Draw Pictures
