@@ -4,7 +4,8 @@
   "description": "A canvas drawing library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -20,12 +21,20 @@
   },
   "homepage": "https://github.com/shortbaby/Emove#readme",
   "devDependencies": {
+    "babel-core": "^6.4.5",
+    "babel-loader": "^6.2.2",
+    "babel-plugin-transform-runtime": "^6.4.3",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-runtime": "^6.3.19",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-jshint": "^2.0.0",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1",
     "gulp-webpack": "^1.5.0",
     "jshint": "^2.9.1",
-    "underscore": "^1.8.3"
+    "path": "^0.12.7",
+    "underscore": "^1.8.3",
+    "webpack": "^1.12.12"
   }
 }
