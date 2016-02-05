@@ -7,7 +7,7 @@ export default class Painter {
         }
     }
     draw(shape) {
-        if (shape.hasOwnProperty('draw') && util.isFunction(shape.draw)) {
+        if (shape.draw && util.isFunction(shape.draw)) {
             shape.draw(this.ctx);
         }
     }

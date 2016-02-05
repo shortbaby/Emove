@@ -1503,7 +1503,7 @@
 	    (0, _createClass3.default)(Painter, [{
 	        key: 'draw',
 	        value: function draw(shape) {
-	            if (shape.hasOwnProperty('draw') && _util2.default.isFunction(shape.draw)) {
+	            if (shape.draw && _util2.default.isFunction(shape.draw)) {
 	                shape.draw(this.ctx);
 	            }
 	        }
@@ -1536,7 +1536,7 @@
 	        return el.currentStyle ? el.currentStyle[property] : document.defaultView.getComputedStyle(el, null).getPropertyValue(property);
 	    },
 	    isFunction: function isFunction(fun) {
-	        return Object.prototype.toString.call(fun) === 'object Function';
+	        return Object.prototype.toString.call(fun) === '[object Function]';
 	    },
 	    isArray: function isArray(array) {
 	        return Object.prototype.toString.call(array) === '[object Array]';

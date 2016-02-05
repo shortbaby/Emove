@@ -14,7 +14,7 @@ const util = {
             document.defaultView.getComputedStyle(el, null).getPropertyValue(property);
     },
     isFunction(fun) {
-        return Object.prototype.toString.call(fun) === 'object Function';
+        return Object.prototype.toString.call(fun) === '[object Function]';
     },
     isArray(array) {
 		return Object.prototype.toString.call(array) === '[object Array]'; 

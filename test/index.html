@@ -3,11 +3,32 @@
 <head>
 	<title>test</title>
 </head>
+<style type="text/css">
+	canvas {
+		border: 1px solid #555;
+	}
+</style>
 <body>
 	<canvas id="test" width="600" height="400"></canvas>
 </body>
 <script type="text/javascript" src="../dist/Emove.js"></script>
 <script type="text/javascript">
 	var emove = new Emove('test');
+	var points = [];
+	var p1 = [20, 20];
+	var p2 = [40, 50];
+	var p3 = [60, 210];
+	var p4 = [80, 200];
+	points.push(p1);
+	points.push(p2);
+	points.push(p3);
+	points.push(p4);
+	var path = new Emove.Path(points, {
+		width: 5,
+		color: '#ec3d61',
+		lineCap: 'round',
+		lineJoin: 'bevel'
+	});
+	emove.addShape(path);
 </script>
 </html>
