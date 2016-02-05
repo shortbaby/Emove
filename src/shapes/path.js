@@ -34,7 +34,7 @@ export default class Path {
     	ctx.lineJoin = this._options.lineJoin;
     	ctx.beginPath();
     	if (this.points.length > 1) {
-    		ctx.moveTo(points[0][0], points[0][1]);
+    		ctx.moveTo(this.points[0][0], this.points[0][1]);
     		let tmpPoints = this.points.slice(1);
     		for(let pt of tmpPoints) {
     			ctx.lineTo(pt[0], pt[1]);

@@ -15,6 +15,7 @@
 <script type="text/javascript">
 	var emove = new Emove('test');
 	var points = [];
+	var points2 = [];
 	var p1 = [20, 20];
 	var p2 = [40, 50];
 	var p3 = [60, 210];
@@ -23,12 +24,19 @@
 	points.push(p2);
 	points.push(p3);
 	points.push(p4);
+	points2.push([120, 6]);
+	points2.push([88, 200]);
+	points2.push([111, 199]);
 	var path = new Emove.Path(points, {
 		width: 5,
 		color: '#ec3d61',
 		lineCap: 'round',
 		lineJoin: 'bevel'
 	});
-	emove.addShape(path);
+	var path2 = new Emove.Path(points2, {
+		width: 9,
+		color: '#774eec'
+	});
+	emove.addShape(path).addShape(path2);
 </script>
 </html>

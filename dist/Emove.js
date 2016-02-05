@@ -1794,7 +1794,7 @@
 	            ctx.lineJoin = this._options.lineJoin;
 	            ctx.beginPath();
 	            if (this.points.length > 1) {
-	                ctx.moveTo(points[0][0], points[0][1]);
+	                ctx.moveTo(this.points[0][0], this.points[0][1]);
 	                var tmpPoints = this.points.slice(1);
 	                var _iteratorNormalCompletion2 = true;
 	                var _didIteratorError2 = false;
