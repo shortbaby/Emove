@@ -15,6 +15,12 @@ const util = {
     },
     isFunction(fun) {
         return Object.prototype.toString.call(fun) === 'object Function';
+    },
+    isArray(array) {
+		return Object.prototype.toString.call(array) === '[object Array]'; 
+    },
+    isNumber(value) {
+        return typeof value === 'number';
     }
 };
 

@@ -5,6 +5,7 @@ export default class Stage {
     addShape(shape) {
         if (!this.hasShape(shape)) {
             this.shapes.push(shape);
+            return shape;
         }
     }
     clearShapes() {
@@ -48,5 +49,8 @@ export default class Stage {
             }
         }
         return rst;
+    }
+    getShapes() {
+        return this.shapes;
     }
 }
