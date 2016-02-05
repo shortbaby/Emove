@@ -1,5 +1,4 @@
 import Util from '../helper/util';
-import Emove from '../Emove.core';
 let defaultOptions = {
     color: '#000',
     width: 1,
@@ -45,5 +44,4 @@ export default class Path {
     	ctx.closePath();
     }
 }
-Emove['Path'] = Path;
 

@@ -1729,10 +1729,6 @@
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _Emove = __webpack_require__(1);
-
-	var _Emove2 = _interopRequireDefault(_Emove);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var defaultOptions = {
@@ -1834,8 +1830,6 @@
 	}();
 
 	exports.default = Path;
-
-	_Emove2.default['Path'] = Path;
 
 /***/ },
 /* 70 */
