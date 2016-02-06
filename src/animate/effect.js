@@ -4,7 +4,7 @@
  * http://www.robertpenner.com/easing/
  */
 
-export default const easingEffects = {
+const easingEffects = {
     linear: function(t) {
         return t;
     },
@@ -200,3 +200,4 @@ export default const easingEffects = {
         return easingEffects.easeOutBounce(t * 2 - 1) * 0.5 + 1 * 0.5;
     }
 }
+export default easingEffects;

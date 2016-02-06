@@ -1,4 +1,4 @@
-import util from '../helper/util';
+import Util from '../helper/util';
 
 export default class Painter {
     constructor(context) {
@@ -7,7 +7,7 @@ export default class Painter {
         }
     }
     draw(shape) {
-        if (shape.draw && util.isFunction(shape.draw)) {
+        if (shape.draw && Util.isFunction(shape.draw)) {
             shape.draw(this.ctx);
         }
     }

@@ -1,4 +1,6 @@
 import Util from '../helper/util';
+import Animation from '../animate/animation';
+
 let defaultOptions = {
     color: '#000',
     width: 1,
@@ -14,6 +16,8 @@ export default class Path {
         let options = args[1] || {};
         this._options = Object.assign({}, defaultOptions, options);
         this.initPath(points);
+        this.stage = null;
+
     }
     initPath(points) {
         this.points = [];

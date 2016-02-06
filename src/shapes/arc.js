@@ -1,5 +1,5 @@
 import Util from '../helper/util';
-let defaultOptions = {
+let defaultLineOptions = {
     color: '#000',
     width: 1,
     lineCap: 'butt',
@@ -12,7 +12,7 @@ export default class Arc {
         let args = Array.from(arguments);
         let points = args[0];
         let options = args[1] || {};
-        this._options = Object.assign({}, defaultOptions, options);
+        this._options = Object.assign({}, defaultLineOptions, options);
         this.initArc(points);
     }
     initArc(points) {

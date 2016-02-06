@@ -50,35 +50,35 @@
 
 	var _Emove2 = _interopRequireDefault(_Emove);
 
-	var _path = __webpack_require__(69);
+	var _path = __webpack_require__(71);
 
 	var _path2 = _interopRequireDefault(_path);
 
-	var _arc = __webpack_require__(70);
+	var _arc = __webpack_require__(74);
 
 	var _arc2 = _interopRequireDefault(_arc);
 
-	var _circle = __webpack_require__(71);
+	var _circle = __webpack_require__(75);
 
 	var _circle2 = _interopRequireDefault(_circle);
 
-	var _ellipse = __webpack_require__(72);
+	var _ellipse = __webpack_require__(76);
 
 	var _ellipse2 = _interopRequireDefault(_ellipse);
 
-	var _image = __webpack_require__(73);
+	var _image = __webpack_require__(77);
 
 	var _image2 = _interopRequireDefault(_image);
 
-	var _polygon = __webpack_require__(74);
+	var _polygon = __webpack_require__(78);
 
 	var _polygon2 = _interopRequireDefault(_polygon);
 
-	var _rectangle = __webpack_require__(75);
+	var _rectangle = __webpack_require__(79);
 
 	var _rectangle2 = _interopRequireDefault(_rectangle);
 
-	var _text = __webpack_require__(76);
+	var _text = __webpack_require__(80);
 
 	var _text2 = _interopRequireDefault(_text);
 
@@ -170,7 +170,7 @@
 	        this._options = (0, _assign2.default)({}, _defaultOption2.default, options);
 	        this.initContext();
 	        this.painter = new _painter2.default(this.context);
-	        this.stage = new _stage2.default();
+	        this.stage = new _stage2.default(this);
 	    }
 
 	    (0, _createClass3.default)(Emove, [{
@@ -1543,6 +1543,15 @@
 	    },
 	    isNumber: function isNumber(value) {
 	        return typeof value === 'number';
+	    },
+	    find: function find(value, array) {
+	        for (var i = 0; i < array.length; i++) {
+	            if (value.id === array[i].id) {
+	                return i;
+	                break;
+	            }
+	        }
+	        return -1;
 	    }
 	};
 
@@ -1552,7 +1561,7 @@
 /* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _from = __webpack_require__(54);
 
@@ -1574,30 +1583,39 @@
 	    value: true
 	});
 
+	var _timeline = __webpack_require__(69);
+
+	var _timeline2 = _interopRequireDefault(_timeline);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Stage = function () {
-	    function Stage() {
+	    function Stage(emove) {
 	        (0, _classCallCheck3.default)(this, Stage);
 
 	        this.shapes = [];
+	        this._emoveIntance = emove;
+	        this.animations = [];
+	        this.playing = false;
+	        this.timeline = new _timeline2.default();
 	    }
 
 	    (0, _createClass3.default)(Stage, [{
-	        key: "addShape",
+	        key: 'addShape',
 	        value: function addShape(shape) {
 	            if (!this.hasShape(shape)) {
+	                shape.stage = this;
 	                this.shapes.push(shape);
 	                return shape;
 	            }
 	        }
 	    }, {
-	        key: "clearShapes",
+	        key: 'clearShapes',
 	        value: function clearShapes() {
 	            this.shapes = [];
 	        }
 	    }, {
-	        key: "getShape",
+	        key: 'getShape',
 	        value: function getShape(id) {
 	            var rst = false;
 	            var _iteratorNormalCompletion = true;
@@ -1631,7 +1649,7 @@
 	            return rst;
 	        }
 	    }, {
-	        key: "removeShape",
+	        key: 'removeShape',
 	        value: function removeShape() {
 	            var shapes = (0, _from2.default)(arguments);
 	            var shapeRemove = shapes[0];
@@ -1649,7 +1667,7 @@
 	            }
 	        }
 	    }, {
-	        key: "hasShape",
+	        key: 'hasShape',
 	        value: function hasShape() {
 	            var shapes = (0, _from2.default)(arguments);
 	            var shapeFind = shapes[0];
@@ -1685,9 +1703,16 @@
 	            return rst;
 	        }
 	    }, {
-	        key: "getShapes",
+	        key: 'getShapes',
 	        value: function getShapes() {
 	            return this.shapes;
+	        }
+	    }, {
+	        key: 'playAniamtion',
+	        value: function playAniamtion() {
+	            if (this.playing) {
+	                return;
+	            }
 	        }
 	    }]);
 	    return Stage;
@@ -1697,6 +1722,164 @@
 
 /***/ },
 /* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _getIterator2 = __webpack_require__(2);
+
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+	var _from = __webpack_require__(54);
+
+	var _from2 = _interopRequireDefault(_from);
+
+	var _classCallCheck2 = __webpack_require__(61);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(62);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _animFrame = __webpack_require__(70);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Timeline = function () {
+	    function Timeline() {
+	        (0, _classCallCheck3.default)(this, Timeline);
+
+	        this.animations = [];
+	        this.running = false;
+	    }
+
+	    (0, _createClass3.default)(Timeline, [{
+	        key: 'addAnimation',
+	        value: function addAnimation() {
+	            var animation = (0, _from2.default)(arguments)[0];
+	            if (Util.find(animation, this.animations) < 0) {
+	                this.animations.push(animation);
+	            }
+	        }
+	    }, {
+	        key: 'removeAnimation',
+	        value: function removeAnimation() {
+	            var animation = (0, _from2.default)(arguments)[0];
+	            var index = Util.find(animation, this.animations);
+	            if (index > -1) {
+	                this.animation.splice(index, 1);
+	            }
+	        }
+	    }, {
+	        key: 'start',
+	        value: function start() {
+	            if (this.running) {
+	                return;
+	            }
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+
+	            try {
+	                for (var _iterator = (0, _getIterator3.default)(this.animations), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var animation = _step.value;
+
+	                    animation.startTime = new Date().getTime();
+	                }
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
+
+	            this.running = true;
+	            this.step();
+	        }
+	    }, {
+	        key: 'step',
+	        value: function step() {
+	            if (!this.running) {
+	                return;
+	            }
+	            var me = this;
+	            var next = me.step;
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
+
+	            try {
+	                for (var _iterator2 = (0, _getIterator3.default)(this.animations), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var animation = _step2.value;
+
+	                    if (animation.complete) {
+	                        this.removeAnimation(animation);
+	                        continue;
+	                    }
+	                    animation.frame();
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+
+	            (0, _animFrame.requestAnimFrame)(next.bind(this));
+	        }
+	    }, {
+	        key: 'stop',
+	        value: function stop() {
+	            this.running = false;
+	        }
+	    }]);
+	    return Timeline;
+	}();
+
+	exports.default = timeline;
+
+/***/ },
+/* 70 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	//Request animation polyfill - http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+
+	var requestAnimFrame = exports.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+	    return window.setTimeout(callback, 1000 / 60);
+	};
+
+	var cancelAnimFrame = exports.cancelAnimFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame || function (callback) {
+	    return window.clearTimeout(callback, 1000 / 60);
+	};
+
+/***/ },
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1729,6 +1912,10 @@
 
 	var _util2 = _interopRequireDefault(_util);
 
+	var _animation = __webpack_require__(72);
+
+	var _animation2 = _interopRequireDefault(_animation);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var defaultOptions = {
@@ -1748,6 +1935,7 @@
 	        var options = args[1] || {};
 	        this._options = (0, _assign2.default)({}, defaultOptions, options);
 	        this.initPath(points);
+	        this.stage = null;
 	    }
 
 	    (0, _createClass3.default)(Path, [{
@@ -1832,7 +2020,291 @@
 	exports.default = Path;
 
 /***/ },
-/* 70 */
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _assign = __webpack_require__(49);
+
+	var _assign2 = _interopRequireDefault(_assign);
+
+	var _from = __webpack_require__(54);
+
+	var _from2 = _interopRequireDefault(_from);
+
+	var _classCallCheck2 = __webpack_require__(61);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _createClass2 = __webpack_require__(62);
+
+	var _createClass3 = _interopRequireDefault(_createClass2);
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _effect = __webpack_require__(73);
+
+	var _effect2 = _interopRequireDefault(_effect);
+
+	var _util = __webpack_require__(67);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var defaultAnimOptions = {
+		effect: 'linear',
+		reverse: false,
+		infinite: false,
+		delay: 0,
+		keep: false
+	};
+
+	var Animation = function () {
+		function Animation() {
+			(0, _classCallCheck3.default)(this, Animation);
+
+			var args = (0, _from2.default)(arguments);
+			var shape = args[0];
+			var options = args[1] || {};
+			this.id = _util2.default.uid();
+			this.complete = false;
+			this.shapes = [];
+			if (_util2.default.isArray(shape)) {
+				this.shapes.concat(shape);
+			} else {
+				this.shapes.push(shape);
+			}
+			this._options = (0, _assign2.default)({}, defaultAnimOptions, options);
+		}
+
+		(0, _createClass3.default)(Animation, [{
+			key: 'start',
+			value: function start() {}
+		}]);
+		return Animation;
+	}();
+
+	exports.default = Animation;
+
+/***/ },
+/* 73 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * Animation methods
+	 * Easing functions adapted from Robert Penner's easing equations
+	 * http://www.robertpenner.com/easing/
+	 */
+
+	var easingEffects = {
+	    linear: function linear(t) {
+	        return t;
+	    },
+	    easeInQuad: function easeInQuad(t) {
+	        return t * t;
+	    },
+	    easeOutQuad: function easeOutQuad(t) {
+	        return -1 * t * (t - 2);
+	    },
+	    easeInOutQuad: function easeInOutQuad(t) {
+	        if ((t /= 1 / 2) < 1) {
+	            return 1 / 2 * t * t;
+	        }
+	        return -1 / 2 * (--t * (t - 2) - 1);
+	    },
+	    easeInCubic: function easeInCubic(t) {
+	        return t * t * t;
+	    },
+	    easeOutCubic: function easeOutCubic(t) {
+	        return 1 * ((t = t / 1 - 1) * t * t + 1);
+	    },
+	    easeInOutCubic: function easeInOutCubic(t) {
+	        if ((t /= 1 / 2) < 1) {
+	            return 1 / 2 * t * t * t;
+	        }
+	        return 1 / 2 * ((t -= 2) * t * t + 2);
+	    },
+	    easeInQuart: function easeInQuart(t) {
+	        return t * t * t * t;
+	    },
+	    easeOutQuart: function easeOutQuart(t) {
+	        return -1 * ((t = t / 1 - 1) * t * t * t - 1);
+	    },
+	    easeInOutQuart: function easeInOutQuart(t) {
+	        if ((t /= 1 / 2) < 1) {
+	            return 1 / 2 * t * t * t * t;
+	        }
+	        return -1 / 2 * ((t -= 2) * t * t * t - 2);
+	    },
+	    easeInQuint: function easeInQuint(t) {
+	        return 1 * (t /= 1) * t * t * t * t;
+	    },
+	    easeOutQuint: function easeOutQuint(t) {
+	        return 1 * ((t = t / 1 - 1) * t * t * t * t + 1);
+	    },
+	    easeInOutQuint: function easeInOutQuint(t) {
+	        if ((t /= 1 / 2) < 1) {
+	            return 1 / 2 * t * t * t * t * t;
+	        }
+	        return 1 / 2 * ((t -= 2) * t * t * t * t + 2);
+	    },
+	    easeInSine: function easeInSine(t) {
+	        return -1 * Math.cos(t / 1 * (Math.PI / 2)) + 1;
+	    },
+	    easeOutSine: function easeOutSine(t) {
+	        return 1 * Math.sin(t / 1 * (Math.PI / 2));
+	    },
+	    easeInOutSine: function easeInOutSine(t) {
+	        return -1 / 2 * (Math.cos(Math.PI * t / 1) - 1);
+	    },
+	    easeInExpo: function easeInExpo(t) {
+	        return t === 0 ? 1 : 1 * Math.pow(2, 10 * (t / 1 - 1));
+	    },
+	    easeOutExpo: function easeOutExpo(t) {
+	        return t === 1 ? 1 : 1 * (-Math.pow(2, -10 * t / 1) + 1);
+	    },
+	    easeInOutExpo: function easeInOutExpo(t) {
+	        if (t === 0) {
+	            return 0;
+	        }
+	        if (t === 1) {
+	            return 1;
+	        }
+	        if ((t /= 1 / 2) < 1) {
+	            return 1 / 2 * Math.pow(2, 10 * (t - 1));
+	        }
+	        return 1 / 2 * (-Math.pow(2, -10 * --t) + 2);
+	    },
+	    easeInCirc: function easeInCirc(t) {
+	        if (t >= 1) {
+	            return t;
+	        }
+	        return -1 * (Math.sqrt(1 - (t /= 1) * t) - 1);
+	    },
+	    easeOutCirc: function easeOutCirc(t) {
+	        return 1 * Math.sqrt(1 - (t = t / 1 - 1) * t);
+	    },
+	    easeInOutCirc: function easeInOutCirc(t) {
+	        if ((t /= 1 / 2) < 1) {
+	            return -1 / 2 * (Math.sqrt(1 - t * t) - 1);
+	        }
+	        return 1 / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1);
+	    },
+	    easeInElastic: function easeInElastic(t) {
+	        var s = 1.70158;
+	        var p = 0;
+	        var a = 1;
+	        if (t === 0) {
+	            return 0;
+	        }
+	        if ((t /= 1) == 1) {
+	            return 1;
+	        }
+	        if (!p) {
+	            p = 1 * 0.3;
+	        }
+	        if (a < Math.abs(1)) {
+	            a = 1;
+	            s = p / 4;
+	        } else {
+	            s = p / (2 * Math.PI) * Math.asin(1 / a);
+	        }
+	        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p));
+	    },
+	    easeOutElastic: function easeOutElastic(t) {
+	        var s = 1.70158;
+	        var p = 0;
+	        var a = 1;
+	        if (t === 0) {
+	            return 0;
+	        }
+	        if ((t /= 1) == 1) {
+	            return 1;
+	        }
+	        if (!p) {
+	            p = 1 * 0.3;
+	        }
+	        if (a < Math.abs(1)) {
+	            a = 1;
+	            s = p / 4;
+	        } else {
+	            s = p / (2 * Math.PI) * Math.asin(1 / a);
+	        }
+	        return a * Math.pow(2, -10 * t) * Math.sin((t * 1 - s) * (2 * Math.PI) / p) + 1;
+	    },
+	    easeInOutElastic: function easeInOutElastic(t) {
+	        var s = 1.70158;
+	        var p = 0;
+	        var a = 1;
+	        if (t === 0) {
+	            return 0;
+	        }
+	        if ((t /= 1 / 2) == 2) {
+	            return 1;
+	        }
+	        if (!p) {
+	            p = 1 * (0.3 * 1.5);
+	        }
+	        if (a < Math.abs(1)) {
+	            a = 1;
+	            s = p / 4;
+	        } else {
+	            s = p / (2 * Math.PI) * Math.asin(1 / a);
+	        }
+	        if (t < 1) {
+	            return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p));
+	        }
+	        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p) * 0.5 + 1;
+	    },
+	    easeInBack: function easeInBack(t) {
+	        var s = 1.70158;
+	        return 1 * (t /= 1) * t * ((s + 1) * t - s);
+	    },
+	    easeOutBack: function easeOutBack(t) {
+	        var s = 1.70158;
+	        return 1 * ((t = t / 1 - 1) * t * ((s + 1) * t + s) + 1);
+	    },
+	    easeInOutBack: function easeInOutBack(t) {
+	        var s = 1.70158;
+	        if ((t /= 1 / 2) < 1) {
+	            return 1 / 2 * (t * t * (((s *= 1.525) + 1) * t - s));
+	        }
+	        return 1 / 2 * ((t -= 2) * t * (((s *= 1.525) + 1) * t + s) + 2);
+	    },
+	    easeInBounce: function easeInBounce(t) {
+	        return 1 - easingEffects.easeOutBounce(1 - t);
+	    },
+	    easeOutBounce: function easeOutBounce(t) {
+	        if ((t /= 1) < 1 / 2.75) {
+	            return 1 * (7.5625 * t * t);
+	        } else if (t < 2 / 2.75) {
+	            return 1 * (7.5625 * (t -= 1.5 / 2.75) * t + 0.75);
+	        } else if (t < 2.5 / 2.75) {
+	            return 1 * (7.5625 * (t -= 2.25 / 2.75) * t + 0.9375);
+	        } else {
+	            return 1 * (7.5625 * (t -= 2.625 / 2.75) * t + 0.984375);
+	        }
+	    },
+	    easeInOutBounce: function easeInOutBounce(t) {
+	        if (t < 1 / 2) {
+	            return easingEffects.easeInBounce(t * 2) * 0.5;
+	        }
+	        return easingEffects.easeOutBounce(t * 2 - 1) * 0.5 + 1 * 0.5;
+	    }
+	};
+	exports.default = easingEffects;
+
+/***/ },
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1867,7 +2339,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var defaultOptions = {
+	var defaultLineOptions = {
 	    color: '#000',
 	    width: 1,
 	    lineCap: 'butt',
@@ -1882,7 +2354,7 @@
 	        var args = (0, _from2.default)(arguments);
 	        var points = args[0];
 	        var options = args[1] || {};
-	        this._options = (0, _assign2.default)({}, defaultOptions, options);
+	        this._options = (0, _assign2.default)({}, defaultLineOptions, options);
 	        this.initArc(points);
 	    }
 
@@ -1968,7 +2440,7 @@
 	exports.default = Arc;
 
 /***/ },
-/* 71 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2104,7 +2576,7 @@
 	exports.default = Circle;
 
 /***/ },
-/* 72 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2240,7 +2712,7 @@
 	exports.default = Ellipse;
 
 /***/ },
-/* 73 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2376,7 +2848,7 @@
 	exports.default = Image;
 
 /***/ },
-/* 74 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2512,7 +2984,7 @@
 	exports.default = Polygon;
 
 /***/ },
-/* 75 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2648,7 +3120,7 @@
 	exports.default = Rectangle;
 
 /***/ },
-/* 76 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

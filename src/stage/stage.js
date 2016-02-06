@@ -1,9 +1,17 @@
+import Timeline from '../animate/timeline';
+
 export default class Stage {
-    constructor() {
+    constructor(emove) {
         this.shapes = [];
+        this._emoveIntance = emove;
+        this.animations = [];
+        this.playing = false;
+        this.timeline = new Timeline();
+
     }
     addShape(shape) {
         if (!this.hasShape(shape)) {
+            shape.stage = this;
             this.shapes.push(shape);
             return shape;
         }
@@ -52,5 +60,11 @@ export default class Stage {
     }
     getShapes() {
         return this.shapes;
+    }
+    playAniamtion() {
+        if(this.playing) {
+            return;
+        } 
+
     }
 }

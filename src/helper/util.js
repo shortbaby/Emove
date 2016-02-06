@@ -21,6 +21,15 @@ const util = {
     },
     isNumber(value) {
         return typeof value === 'number';
+    },
+    find(value, array) {
+        for (let i = 0; i < array.length; i++) {
+            if(value.id === array[i].id) {
+                return i;
+                break;
+            }
+        }
+        return -1;
     }
 };
 

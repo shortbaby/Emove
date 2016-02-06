@@ -10,6 +10,7 @@ import Painter from './painter/painter';
 import Stage from './stage/stage';
 import Util from './helper/util';
 
+
 export default class Emove {
     constructor() {
         let args = Array.from(arguments);
@@ -19,7 +20,7 @@ export default class Emove {
         this._options = Object.assign({}, globalOptions, options);
         this.initContext();
         this.painter = new Painter(this.context);
-        this.stage = new Stage();
+        this.stage = new Stage(this);
     }
     initContext() {
         if (typeof this.context === 'string') {
